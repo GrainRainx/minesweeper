@@ -97,6 +97,8 @@ void MainWindow::createGrid() {
 //            connect(button, &QPushButton::clicked, this, &MainWindow::handleLeftClick);
             connect(button, &QPushButton::clicked, [this, i, j]() { handleLeftClick(i, j); });
 //            connect(button, &QPushButton::clicked, this, &MainWindow::handleRightClick);
+            button->setContextMenuPolicy(Qt::CustomContextMenu);
+            connect(button, &QPushButton::customContextMenuRequested, [this, i, j](const QPoint &pos) { handleRightClick(i, j); });
         }
         buttons.append(rowButtons);
     }
@@ -151,7 +153,7 @@ void MainWindow::handleButtonClick() {
 
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
-
+    return ;
     // 获取全局坐标
     QPoint globalPos = event->globalPos();
 
@@ -166,7 +168,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
             if (buttonRect.contains(event->pos())) {
                 qDebug() << "Clicked on button at row:" << i << "col:" << j;
                 // 在这里处理按钮点击事件
-                handleRightClick(i, j);
+//                handleRightClick(i, j);
                 return;
             }
         }
