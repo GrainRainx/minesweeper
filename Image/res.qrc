@@ -8,13 +8,8 @@
         <file>6.png</file>
         <file>7.png</file>
         <file>8.png</file>
-        <file>window_black.png</file>
-        <file>window_red.png</file>
         <file>mine.png</file>
         <file>flag.png</file>
         <file>boom.png</file>
-        <file>face1.png</file>
-        <file>face2.png</file>
-        <file>face3.png</file>
     </qresource>
 </RCC>

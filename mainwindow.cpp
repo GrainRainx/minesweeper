@@ -90,6 +90,10 @@ void MainWindow::createGrid() {
         for (int j = 0; j < cols; ++j) {
             QPushButton *button = new QPushButton(this);
             button->setFixedSize(40, 40); // 设置按钮为固定大小
+//            button->setStyleSheet("background-color:rgb(255,255,255);"
+//                                  "border:1px;border-style:solid;"
+//                                  "border-color:rgb(205,205,205);"
+//                                  "border-radius:4px;");
             rowButtons.append(button);
             layout->addWidget(button, i, j);
 //            connect(button, &QPushButton::clicked, this, &MainWindow::handleLeftClick);
@@ -155,23 +159,22 @@ void MainWindow::is_win() {
 }
 
 void MainWindow::open_around(int x, int y) {
-
-
-//    for (int i = 0; i < 8; i++) {
-//        int nx = x + dx[i];
-//        int ny = y + dy[i];
-//        if(nx < 0 || nx >= mx_row) continue;
-//        if(ny < 0 || ny >= mx_col) continue;
-//        if (graph_ptr[nx][ny]->getOpened()) continue;
-
-//        open_around(nx, ny);
-//    }
+    show_button(x, y, mineField[x][y]);
+    if(mineField[x][y] != 0) return ;
+    for(int i = 0; i < 8; i++) {
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        if(nx < 0 || nx >= rows) continue;
+        if(ny < 0 || ny >= cols) continue;
+        if(open[nx][ny]) continue;
+        open_around(nx, ny);
+    }
 }
 
 
 void MainWindow::handleLeftClick(int r, int c) {
     if(open[r][c]) return;
-    open[r][c] = true;
+    qDebug() << "when i click\n";
 
     if(flag[r][c]) {
         flag[r][c] = !flag[r][c];
@@ -182,7 +185,12 @@ void MainWindow::handleLeftClick(int r, int c) {
         fail();
         return ;
     }
-    show_button(r, c, mineField[r][c]);
+    if(mineField[r][c] == 0) {
+        open_around(r, c);
+
+    } else {
+        show_button(r, c, mineField[r][c]);
+    }
     is_win();
 }
 
@@ -223,10 +231,18 @@ void MainWindow::lay_mines() {
 
 
 void MainWindow::show_button(int r, int c, int num) {
+    if(open[r][c]) return ;
+    open[r][c] = true;
+    buttons[r][c]->setStyleSheet("background-color:rgb(245,245,245);"
+                                 "border:2px;border-style:solid;"
+                                 "border-color:rgb(205,205,205);"
+                                 "border-radius:4px;");
     switch(num)
     {
         case -1 : buttons[r][c]->setIcon(QIcon(":/SaoLei/mine"));break;
-        case 0 : buttons[r][c]->setIcon(QIcon(":/SaoLei/face3"));break;
+        case 0 : {
+        break;
+        }
         case 1 : buttons[r][c]->setIcon(QIcon(":/SaoLei/1"));break;
         case 2 : buttons[r][c]->setIcon(QIcon(":/SaoLei/2"));break;
         case 3 : buttons[r][c]->setIcon(QIcon(":/SaoLei/3"));break;
