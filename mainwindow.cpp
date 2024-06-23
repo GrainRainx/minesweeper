@@ -144,10 +144,12 @@ void MainWindow::handleButtonClick() {
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
     qDebug() << "i am click event\n";
+    buttons[1][1]->setIcon(QIcon(":/SaoLei/flag"));
     // 实现鼠标点击事件处理逻辑
 }
 void MainWindow::handleLeftClick() {
-    QPushButton *button = qobject_cast<QPushButton*>(sender());
+//    QPushButton *button = qobject_cast<QPushButton*>(sender());
+    buttons[1][1]->setIcon(QIcon(":/SaoLei/1"));
 //    Qt::MouseButton buttonPressed = event->button();
     qDebug() << "i am left click\n";
 }
