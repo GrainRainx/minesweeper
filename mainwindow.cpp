@@ -17,12 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     layout->setSpacing(0); // 设置按钮之间的间隙为0
     layout->setContentsMargins(0, 0, 0, 0);
     setupMenu();
-    clearGrid();
-    createGrid();
     setEasyMode();
-    lay_mines();
-    count_around_mine();
-//    calculateNumbers();
 }
 
 MainWindow::~MainWindow()
@@ -47,7 +42,6 @@ void MainWindow::restartGame() {
     createGrid();
     lay_mines();
     count_around_mine();
-//    calculateNumbers();
 }
 
 void MainWindow::setEasyMode() {
@@ -128,21 +122,68 @@ void MainWindow::createGrid() {
             open[i][j] = false;
         }
     }
+    win = false;
+    lose = false;
 }
 
+
+void MainWindow::fail() {
+    if(win || lose) return ;
+    lose = true;
+    for(int i = 0; i < rows; i++) {
+        for(int j = 0; j < cols; j++) {
+            if(mineField[i][j] == -1) {
+                show_button(i, j, -1);
+            }
+        }
+    }
+    QMessageBox::information(this,"","踩雷！！！");
+}
+
+void MainWindow::is_win() {
+    if(win || lose) return ;
+    int sum = 0;
+    for(int i = 0; i < rows; i++) {
+        for(int j = 0; j < cols; j++) {
+            if(!open[i][j])sum++;
+        }
+    }
+    if(sum == numMines) {
+        win = true;
+        QMessageBox::information(this,"","胜利！！");
+    }
+}
+
+void MainWindow::open_around(int x, int y) {
+
+
+//    for (int i = 0; i < 8; i++) {
+//        int nx = x + dx[i];
+//        int ny = y + dy[i];
+//        if(nx < 0 || nx >= mx_row) continue;
+//        if(ny < 0 || ny >= mx_col) continue;
+//        if (graph_ptr[nx][ny]->getOpened()) continue;
+
+//        open_around(nx, ny);
+//    }
+}
 
 
 void MainWindow::handleLeftClick(int r, int c) {
     if(open[r][c]) return;
     open[r][c] = true;
 
-    qDebug() << "i am left click\n";
-    qDebug() << "x = " << r << " y = " << c << "\n";
-//    QPushButton *button = qobject_cast<QPushButton*>(sender());
-
-    buttons[r][c]->setIcon(QIcon(":/SaoLei/1"));
-//    Qt::MouseButton buttonPressed = event->button();
-
+    if(flag[r][c]) {
+        flag[r][c] = !flag[r][c];
+        buttons[r][c]->setIcon(QIcon(""));
+        return ;
+    }
+    if(mineField[r][c] == -1) {
+        fail();
+        return ;
+    }
+    show_button(r, c, mineField[r][c]);
+    is_win();
 }
 
 void MainWindow::handleRightClick(int r, int c) {
@@ -170,21 +211,22 @@ void MainWindow::lay_mines() {
         }
     }
 
-    for(int i = 0; i < rows; i++) {
-        for(int j = 0; j < cols; j++) {
-            if(mineField[i][j] == -1) {
-                handleRightClick(i, j);
-            }
-        }
-    }
+//    for(int i = 0; i < rows; i++) {
+//        for(int j = 0; j < cols; j++) {
+//            if(mineField[i][j] == -1) {
+//                show_button(i, j, 0);
+//            }
+//        }
+//    }
+
 }
 
 
 void MainWindow::show_button(int r, int c, int num) {
-
     switch(num)
     {
-        case 0 : break;
+        case -1 : buttons[r][c]->setIcon(QIcon(":/SaoLei/mine"));break;
+        case 0 : buttons[r][c]->setIcon(QIcon(":/SaoLei/face3"));break;
         case 1 : buttons[r][c]->setIcon(QIcon(":/SaoLei/1"));break;
         case 2 : buttons[r][c]->setIcon(QIcon(":/SaoLei/2"));break;
         case 3 : buttons[r][c]->setIcon(QIcon(":/SaoLei/3"));break;
@@ -193,6 +235,7 @@ void MainWindow::show_button(int r, int c, int num) {
         case 6 : buttons[r][c]->setIcon(QIcon(":/SaoLei/6"));break;
         case 7 : buttons[r][c]->setIcon(QIcon(":/SaoLei/7"));break;
         case 8 : buttons[r][c]->setIcon(QIcon(":/SaoLei/8"));break;
+//        default : buttons[r][c]->setIcon(QIcon(""));break;
     }
 }
 
@@ -212,17 +255,6 @@ void MainWindow::count_around_mine() {
             mineField[i][j] = sum;
         }
     }
-
-
-    for(int i = 0; i < rows; i++) {
-        for(int j = 0; j < cols; j++) {
-            if(mineField[i][j] == -1) continue;
-            int c = mineField[i][j];
-//            buttons[i][j]->setIcon(QIcon(":/SaoLei/flag"));break;
-            show_button(i, j, c);
-        }
-    }
-
 }
 
 

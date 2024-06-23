@@ -30,6 +30,9 @@ private:
     void lay_mines();
     void count_around_mine();
     void show_button(int r, int c, int num);
+    void fail();
+    void is_win();
+    void open_around(int x, int y);
 
 
     QVector<QVector<QPushButton*>> buttons; // 用于存储按钮的二维数组
@@ -39,6 +42,8 @@ private:
     int rows = 9; // 行数
     int cols = 9; // 列数
     int numMines = 10; // 地雷数量
+    bool win = false;
+    bool lose = false;
 
     int dx[8] = {-1, 1, -1, 1, 0, 1, -1, 0};
     int dy[8] = {-1, 1, 1, -1, 1, 0, 0, -1};
