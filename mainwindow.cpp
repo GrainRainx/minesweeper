@@ -89,7 +89,7 @@ void MainWindow::createGrid() {
         QVector<QPushButton*> rowButtons;
         for (int j = 0; j < cols; ++j) {
             QPushButton *button = new QPushButton(this);
-            button->setFixedSize(40, 40); // 设置按钮为固定大小
+            button->setFixedSize(40, 40);
 //            button->setStyleSheet("background-color:rgb(255,255,255);"
 //                                  "border:1px;border-style:solid;"
 //                                  "border-color:rgb(205,205,205);"
