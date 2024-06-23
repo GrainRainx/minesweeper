@@ -45,7 +45,8 @@ private slots:
     void setEasyMode();
     void setMediumMode();
 
-    void handleLeftClick();
-    void handleRightClick();
+//    void handleLeftClick();
+    void handleLeftClick(int, int);
+    void handleRightClick(int, int);
 };
 #endif // MAINWINDOW_H

@@ -94,7 +94,8 @@ void MainWindow::createGrid() {
             button->setFixedSize(40, 40); // 设置按钮为固定大小
             rowButtons.append(button);
             layout->addWidget(button, i, j);
-            connect(button, &QPushButton::clicked, this, &MainWindow::handleLeftClick);
+//            connect(button, &QPushButton::clicked, this, &MainWindow::handleLeftClick);
+            connect(button, &QPushButton::clicked, [this, i, j]() { handleLeftClick(i, j); });
 //            connect(button, &QPushButton::clicked, this, &MainWindow::handleRightClick);
         }
         buttons.append(rowButtons);
@@ -142,20 +143,54 @@ void MainWindow::handleButtonClick() {
 }
 
 
+//void MainWindow::mousePressEvent(QMouseEvent *event) {
+//    qDebug() << "i am click event\n";
+//    buttons[1][1]->setIcon(QIcon(":/SaoLei/flag"));
+//    // 实现鼠标点击事件处理逻辑
+//}
+
+
 void MainWindow::mousePressEvent(QMouseEvent *event) {
-    qDebug() << "i am click event\n";
-    buttons[1][1]->setIcon(QIcon(":/SaoLei/flag"));
-    // 实现鼠标点击事件处理逻辑
-}
-void MainWindow::handleLeftClick() {
-//    QPushButton *button = qobject_cast<QPushButton*>(sender());
-    buttons[1][1]->setIcon(QIcon(":/SaoLei/1"));
-//    Qt::MouseButton buttonPressed = event->button();
-    qDebug() << "i am left click\n";
+
+    // 获取全局坐标
+    QPoint globalPos = event->globalPos();
+
+    // 遍历按钮数组，找到被点击的按钮
+    for (int i = 0; i < buttons.size(); ++i) {
+        for (int j = 0; j < buttons[i].size(); ++j) {
+            QPushButton *button = buttons[i][j];
+            QRect buttonRect = button->geometry(); // 获取按钮的几何范围
+            QPoint buttonPos = button->mapToGlobal(buttonRect.topLeft()); // 将按钮的顶部左侧角落转换为全局坐标
+
+            // 检查点击位置是否在按钮范围内
+            if (buttonRect.contains(event->pos())) {
+                qDebug() << "Clicked on button at row:" << i << "col:" << j;
+                // 在这里处理按钮点击事件
+                handleRightClick(i, j);
+                return;
+            }
+        }
+    }
+
+
+    QMainWindow::mousePressEvent(event); // 如果没有点击按钮，则调用基类的处理方法
 }
 
-void MainWindow::handleRightClick() {
+
+
+void MainWindow::handleLeftClick(int r, int c) {
+    qDebug() << "i am left click\n";
+    qDebug() << "x = " << r << " y = " << c << "\n";
+//    QPushButton *button = qobject_cast<QPushButton*>(sender());
+    buttons[r][c]->setIcon(QIcon(":/SaoLei/1"));
+//    Qt::MouseButton buttonPressed = event->button();
+
+}
+
+void MainWindow::handleRightClick(int r, int c) {
+    buttons[r][c]->setIcon(QIcon(":/SaoLei/flag"));
     qDebug() << "i am right click\n";
+    qDebug() << "x = " << r << " y = " << c << "\n";
 }
 
 
