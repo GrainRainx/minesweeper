@@ -48,7 +48,7 @@ void MainWindow::setEasyMode() {
     rows = 9;
     cols = 9;
     numMines = 10;
-    setFixedSize(360, 360); // 根据新的网格大小调整窗口大小
+    setFixedSize(370, 370); // 根据新的网格大小调整窗口大小
     restartGame();
 
 }
@@ -58,7 +58,7 @@ void MainWindow::setMediumMode() {
     cols = 16;
     numMines = 20;
     restartGame();
-    setFixedSize(560, 560); // 根据新的网格大小调整窗口大小
+    setFixedSize(570, 570); // 根据新的网格大小调整窗口大小
 }
 
 void MainWindow::setupMenu() {
@@ -81,8 +81,18 @@ void MainWindow::setupMenu() {
     menuBar->addMenu(gameMenu);
     setMenuBar(menuBar);
 }
-
-
+template<typename T>
+void MainWindow::reset_graph(QVector<QVector<T>>& a, int row, int col) {
+    a.resize(row);
+    for(int i = 0; i < row; i++) {
+        a[i].resize(col);
+    }
+    for(int i = 0; i < row; i++) {
+        for(int j = 0; j < col; j++) {
+            a[i][j] = 0;
+        }
+    }
+}
 void MainWindow::createGrid() {
     QGridLayout *layout = qobject_cast<QGridLayout*>(centralWidget()->layout());
     for (int i = 0; i < rows; ++i) {
@@ -104,33 +114,12 @@ void MainWindow::createGrid() {
         }
         buttons.append(rowButtons);
     }
-
-    mineField.resize(rows);
-    for (int i = 0; i < rows; ++i) {
-        mineField[i].resize(cols);
-        for (int j = 0; j < cols; ++j) {
-            mineField[i][j] = 0; // 初始化为0
-        }
-    }
-    flag.resize(rows);
-    for (int i = 0; i < rows; ++i) {
-        flag[i].resize(cols);
-        for (int j = 0; j < cols; ++j) {
-            flag[i][j] = false;
-        }
-    }
-    open.resize(rows);
-    for (int i = 0; i < rows; ++i) {
-        open[i].resize(cols);
-        for (int j = 0; j < cols; ++j) {
-            open[i][j] = false;
-        }
-    }
+    reset_graph(mineField, rows, cols);
+    reset_graph(flag, rows, cols);
+    reset_graph(open, rows, cols);
     win = false;
     lose = false;
 }
-
-
 void MainWindow::fail() {
     if(win || lose) return ;
     lose = true;
@@ -143,7 +132,6 @@ void MainWindow::fail() {
     }
     QMessageBox::information(this,"","踩雷！！！");
 }
-
 void MainWindow::is_win() {
     if(win || lose) return ;
     int sum = 0;
@@ -157,7 +145,6 @@ void MainWindow::is_win() {
         QMessageBox::information(this,"","胜利！！");
     }
 }
-
 void MainWindow::open_around(int x, int y) {
     show_button(x, y, mineField[x][y]);
     if(mineField[x][y] != 0) return ;
@@ -170,8 +157,6 @@ void MainWindow::open_around(int x, int y) {
         open_around(nx, ny);
     }
 }
-
-
 void MainWindow::handleLeftClick(int r, int c) {
     if(open[r][c]) return;
     qDebug() << "when i click\n";
@@ -204,8 +189,6 @@ void MainWindow::handleRightClick(int r, int c) {
     qDebug() << "i am right click\n";
     qDebug() << "x = " << r << " y = " << c << "\n";
 }
-
-
 void MainWindow::lay_mines() {
     int k = numMines;
     while(k--) {
@@ -228,8 +211,6 @@ void MainWindow::lay_mines() {
 //    }
 
 }
-
-
 void MainWindow::show_button(int r, int c, int num) {
     if(open[r][c]) return ;
     open[r][c] = true;
@@ -254,9 +235,6 @@ void MainWindow::show_button(int r, int c, int num) {
 //        default : buttons[r][c]->setIcon(QIcon(""));break;
     }
 }
-
-
-
 void MainWindow::count_around_mine() {
     for(int i = 0; i < rows; i++) {
         for(int j = 0; j < cols; j++) {

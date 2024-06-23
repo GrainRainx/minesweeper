@@ -23,8 +23,7 @@ private:
     void setupMenu();
 
     void createGrid();
-//    void placeMines();
-//    void calculateNumbers();
+
     void clearGrid();
 
     void lay_mines();
@@ -33,7 +32,8 @@ private:
     void fail();
     void is_win();
     void open_around(int x, int y);
-
+    template<typename T>
+    void reset_graph(QVector<QVector<T>>& , int, int);
 
     QVector<QVector<QPushButton*>> buttons; // 用于存储按钮的二维数组
     QVector<QVector<int>> mineField; // 用于存储地雷和数字的二维数组
@@ -56,7 +56,6 @@ private slots:
     void setEasyMode();
     void setMediumMode();
 
-//    void handleLeftClick();
     void handleLeftClick(int, int);
     void handleRightClick(int, int);
 };
