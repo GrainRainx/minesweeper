@@ -14,8 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     QGridLayout *layout = new QGridLayout(centralWidget);
     setCentralWidget(centralWidget);
     centralWidget->setLayout(layout);
-    layout->setSpacing(0); // 设置按钮之间的间隙为0
-    layout->setContentsMargins(0, 0, 0, 0);
+//    layout->setSpacing(0);
+//    layout->setContentsMargins(0, 0, 0, 0);
     setupMenu();
     setEasyMode();
 }
@@ -34,6 +34,8 @@ void MainWindow::clearGrid() {
     }
     buttons.clear();
     mineField.clear();
+    flag.clear();
+    open.clear();
 }
 
 
@@ -48,7 +50,7 @@ void MainWindow::setEasyMode() {
     rows = 9;
     cols = 9;
     numMines = 10;
-    setFixedSize(370, 370); // 根据新的网格大小调整窗口大小
+    setFixedSize(370, 370);
     restartGame();
 
 }
@@ -58,7 +60,7 @@ void MainWindow::setMediumMode() {
     cols = 16;
     numMines = 20;
     restartGame();
-    setFixedSize(570, 570); // 根据新的网格大小调整窗口大小
+    setFixedSize(570, 570);
 }
 
 void MainWindow::setupMenu() {
@@ -81,6 +83,7 @@ void MainWindow::setupMenu() {
     menuBar->addMenu(gameMenu);
     setMenuBar(menuBar);
 }
+
 template<typename T>
 void MainWindow::reset_graph(QVector<QVector<T>>& a, int row, int col) {
     a.resize(row);
@@ -93,6 +96,7 @@ void MainWindow::reset_graph(QVector<QVector<T>>& a, int row, int col) {
         }
     }
 }
+
 void MainWindow::createGrid() {
     QGridLayout *layout = qobject_cast<QGridLayout*>(centralWidget()->layout());
     for (int i = 0; i < rows; ++i) {

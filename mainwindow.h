@@ -35,13 +35,13 @@ private:
     template<typename T>
     void reset_graph(QVector<QVector<T>>& , int, int);
 
-    QVector<QVector<QPushButton*>> buttons; // 用于存储按钮的二维数组
-    QVector<QVector<int>> mineField; // 用于存储地雷和数字的二维数组
+    QVector<QVector<QPushButton*>> buttons;
+    QVector<QVector<int>> mineField;
     QVector<QVector<bool>> flag;
     QVector<QVector<bool>> open;
-    int rows = 9; // 行数
-    int cols = 9; // 列数
-    int numMines = 10; // 地雷数量
+    int rows = 9;
+    int cols = 9;
+    int numMines = 10;
     bool win = false;
     bool lose = false;
 
